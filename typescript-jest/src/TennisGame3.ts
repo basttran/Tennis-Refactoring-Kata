@@ -1,34 +1,46 @@
-import { TennisGame } from './TennisGame';
+import { TennisGame } from "./TennisGame";
 
 export class TennisGame3 implements TennisGame {
-  private p2: number = 0;
-  private p1: number = 0;
-  private p1N: string;
-  private p2N: string;
+  private p2points: number = 0;
+  private p1points: number = 0;
+  // private p1name: string;
+  // private p2name: string;
 
-  constructor(p1N: string, p2N: string) {
-    this.p1N = p1N;
-    this.p2N = p2N;
+  constructor(_p1name: string, _p2name: string) {
+    // this.p1name = p1name;
+    // this.p2name = p2name;
   }
 
   getScore(): string {
     let s: string;
-    if (this.p1 < 4 && this.p2 < 4 && !(this.p1 + this.p2 === 6)) {
-      const p: string[] = ['Love', 'Fifteen', 'Thirty', 'Forty'];
-      s = p[this.p1];
-      return (this.p1 === this.p2) ? s + '-All' : s + '-' + p[this.p2];
+    if (
+      this.p1points < 4 &&
+      this.p2points < 4 &&
+      !(this.p1points === 3 && this.p2points === 3)
+    ) {
+      const [player1tranlatedPoints, player2tranlatedPoints] = [
+        this.p1points,
+        this.p2points,
+      ].map((points) => ["Love", "Fifteen", "Thirty", "Forty"][points]);
+
+      if (this.p1points === this.p2points) {
+        return player1tranlatedPoints + "-All";
+      }
+      return player1tranlatedPoints + "-" + player2tranlatedPoints;
     } else {
-      if (this.p1 === this.p2)
-        return 'Deuce';
-      s = this.p1 > this.p2 ? this.p1N : this.p2N;
-      return (((this.p1 - this.p2) * (this.p1 - this.p2)) === 1) ? 'Advantage ' + s : 'Win for ' + s;
+      if (this.p1points === this.p2points) {
+        return "Deuce";
+      }
+
+      s = this.p1points > this.p2points ? "player1" : "player2";
+      if (Math.abs(this.p1points - this.p2points) === 1) {
+        return "Advantage " + s;
+      }
+      return "Win for " + s;
     }
   }
 
   wonPoint(playerName: string): void {
-    if (playerName === 'player1')
-      this.p1 += 1;
-    else
-      this.p2 += 1;
+    playerName === "player1" ? (this.p1points += 1) : (this.p2points += 1);
   }
 }
